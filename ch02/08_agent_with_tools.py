@@ -1,5 +1,6 @@
 from agents import Agent, Runner, function_tool
 from typing import TypedDict
+from pydantic import BaseModel, ConfigDict
 
 from agent_config import model
 
@@ -36,6 +37,13 @@ class Task(TypedDict):
     """Task description."""
 
 
+class ResearchPlanModel(BaseModel):
+    tasks: list[Task]
+    """Numbered tasks for research."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
 @function_tool
 def get_research_sources() -> list[str]:
     """Provides a list of research sources."""
@@ -61,6 +69,7 @@ def get_resource_url(research_source: str) -> str:
 agent = Agent(
     name="Research Planner",
     instructions=instructions,
+    output_type=ResearchPlanModel,
     model=model,
     tools=[get_research_sources, get_resource_url],
 )

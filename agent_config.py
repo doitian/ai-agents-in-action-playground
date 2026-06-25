@@ -13,6 +13,6 @@ _client = AsyncOpenAI(
 )
 
 model = OpenAIChatCompletionsModel(
-    model="glm-5.2",
+    model=os.environ["OPENAI_DEFAULT_MODEL"],
     openai_client=_client,
 )
